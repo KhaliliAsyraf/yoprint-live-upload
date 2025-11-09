@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -y \
 # Install Redis extension
 RUN pecl install redis && docker-php-ext-enable redis
 
+# Install Node.js (LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
+
 # Allow Git to trust the app directory
 RUN git config --global --add safe.directory /var/www/html
 
@@ -43,10 +48,11 @@ RUN echo "upload_max_filesize=100M" > /usr/local/etc/php/conf.d/uploads.ini \
 # Publish Livewire config
 RUN php artisan livewire:publish --config
 
-
 # Run artisan setup on container build
 RUN php artisan optimize:clear || true
 
+# Run build frontend assets
+RUN npm install && npm run build
 
 EXPOSE 9000
 

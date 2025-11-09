@@ -109,6 +109,8 @@ class ProcessCsvUpload implements ShouldQueue
 
             fclose($handle);
 
+            sleep(2); // simulate processing time
+
             $upload->update([
                 'status' => 'completed',
                 'processed_at' => now(),
