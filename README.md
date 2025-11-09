@@ -45,6 +45,10 @@ This will:
 
     - Supervisor (manages queue:work)
 
+Once running, open your browser and visit:
+
+👉 http://localhost:8005/upload
+
 ---
 
 ## ⚡ Real-Time Updates
@@ -70,3 +74,7 @@ Livewire polls the backend every 2 seconds to fetch the latest file upload statu
 - Automatically refreshes using Livewire polling
 
 - Automatic migration and frontend build handled during Docker startup
+
+- Supervisor-managed queue workers for continuous processing
+
+- Application served at http://localhost:8005
