@@ -31,14 +31,14 @@
             <tbody class="bg-white">
                 @foreach($uploads as $u)
                     <tr>
-                        <td class="px-2 py-2 text-sm">{{ Carbon\Carbon::parse($u->uploaded_at)->toDateTimeString() . ' (' . Carbon\Carbon::parse($u->uploaded_at)->diffForHumans() . ')' }}</td>
-                        <td class="px-2 py-2 text-sm">{{ $u->original_name }}</td>
+                        <td class="px-2 py-2 text-sm">{{ $u['uploaded_at'] . ' (' . $u['uploaded_at_human'] . ')' }}</td>
+                        <td class="px-2 py-2 text-sm">{{ $u['original_name'] }}</td>
                         <td class="px-2 py-2 text-sm">
-                            <span class="px-2 py-1 rounded {{ $u->status === 'completed' ? 'bg-green-100' : ($u->status === 'failed' ? 'bg-red-100' : 'bg-yellow-100') }}">
-                                {{ ucfirst($u->status) }}
+                            <span class="px-2 py-1 rounded {{ $u['status'] === 'completed' ? 'bg-green-100' : ($u['status'] === 'failed' ? 'bg-red-100' : 'bg-yellow-100') }}">
+                                {{ ucfirst($u['status']) }}
                             </span>
                         </td>
-                        <td class="px-2 py-2 text-sm">{{ Carbon\Carbon::parse($u->processed_at)->toDateTimeString() }}</td>
+                        <td class="px-2 py-2 text-sm">{{ $u['processed_at'] }}</td>
                     </tr>
                 @endforeach
             </tbody>

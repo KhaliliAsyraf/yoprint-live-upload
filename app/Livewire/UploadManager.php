@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Http\Resources\FileUploadResource;
 use App\Jobs\ProcessCsvUpload;
 use App\Models\FileUpload;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -27,9 +29,7 @@ class UploadManager extends Component
 
     public function loadUploads()
     {
-        $this->uploads = FileUpload::select('uploaded_at', 'original_name', 'status', 'processed_at')
-            ->orderByDesc('created_at')
-            ->get();
+        $this->uploads = FileUploadResource::collection($this->fileUploadQuery())->resolve();
     }
 
     public function updatedFile()
@@ -81,8 +81,25 @@ class UploadManager extends Component
         $this->loadUploads();
     }
 
-    public function render()
+    /**
+     * Render page
+     * 
+     * @return View
+     */
+    public function render(): View
     {
         return view('livewire.upload-manager');
+    }
+
+    /**
+     * File query
+     * 
+     * @return Collection
+     */
+    public function fileUploadQuery(): Collection
+    {
+        return FileUpload::select('uploaded_at', 'original_name', 'status', 'processed_at')
+            ->orderByDesc('created_at')
+            ->get();
     }
 }
