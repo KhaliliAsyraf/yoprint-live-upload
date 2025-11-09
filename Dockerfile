@@ -56,5 +56,10 @@ RUN npm install && npm run build
 
 EXPOSE 9000
 
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
 # Run PHP-FPM under Supervisor (includes queue worker)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
