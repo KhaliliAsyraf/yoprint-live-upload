@@ -78,3 +78,37 @@ Livewire polls the backend every 2 seconds to fetch the latest file upload statu
 - Supervisor-managed queue workers for continuous processing
 
 - Application served at http://localhost:8005
+
+---
+
+## 💡 Highlight
+
+This project uses **Livewire** to handle file uploads and render the upload table.  
+While it is **not a standard Laravel controller**, this Livewire component acts in a “controller-like” way:
+
+- **Location:** `app/Http/Livewire/UploadManager.php`  
+- **Blade View:** `resources/views/livewire/upload-manager.blade.php`  
+
+#### How it works:
+
+1. **Handles requests & validation**  
+   The Livewire component validates uploaded CSV files, stores them, and initiates processing.
+
+2. **Dispatches background jobs**  
+   Each upload triggers a `ProcessCsvUpload` that handles CSV parsing, cleaning non-UTF-8 characters, and performing chunked `upsert()` operations in the database.
+
+3. **Uses Transformers (Resources) for data formatting**  
+   - The component retrieves uploaded files and passes them through a **Laravel Resource** (`FileUploadResource`) before sending them to the view.  
+   - This ensures consistent API-style formatting, similar to what a controller returning a JSON API would do.
+
+4. **Real-time progress updates**  
+   - Redis stores upload progress.  
+   - Livewire polls and updates the table automatically without page reloads.  
+
+#### Key Points:
+
+- This component **replaces a traditional controller** for this page.  
+- All heavy-lifting logic (CSV parsing, upsert, progress tracking) is handled in the **Job file**.  
+- The page is fully reactive and public — no auth is required.  
+
+> **Note:** If you are looking for a traditional `Controller -> View` setup, this page does not use it. All actions are encapsulated in the Livewire component and background job.
